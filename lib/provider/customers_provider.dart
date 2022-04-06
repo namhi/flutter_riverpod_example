@@ -56,7 +56,6 @@ class CustomerNotifier extends StateNotifier<CustomersState> {
     try {
       // throw Exception('On errr');
       await _customerRepository.delete(id);
-
       final customers = state.customers.toList();
       customers.removeWhere((element) => element.id == id);
 

@@ -5,12 +5,12 @@ import '../../model/customer.dart';
 
 class FakeCustomerRepositoryImpl implements CustomerRepository {
   final List<Customer> _customers = [
-    const Customer(id: 1, name: 'Huỳnh Tấn Vinh'),
-    const Customer(id: 2, name: 'Lương Quốc Tiệp'),
-    const Customer(id: 3, name: 'Trần Thúy Vy'),
-    const Customer(id: 4, name: 'Đào Duy Hậu'),
-    const Customer(id: 5, name: 'Đào Trọng Hậu'),
-    const Customer(id: 6, name: 'Đào Duy Trọng'),
+    const Customer(id: 1, name: 'Dominic'),
+    const Customer(id: 2, name: 'Darius'),
+    const Customer(id: 3, name: 'Aatrox'),
+    const Customer(id: 4, name: 'Ahri'),
+    const Customer(id: 5, name: 'Akali'),
+    const Customer(id: 6, name: 'Alistar'),
   ];
   @override
   Future<void> delete(int id) async {

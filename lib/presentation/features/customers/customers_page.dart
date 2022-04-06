@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_example/provider/customers_provider.dart';
 import '../../../model/customer.dart';
+import 'customer_edit_page.dart';
 
 class CustomersPage extends ConsumerStatefulWidget {
   const CustomersPage({Key? key}) : super(key: key);
@@ -21,10 +22,17 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Khách hàng'),
+        title: const Text('Customers'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CustomerEditPage(),
+                ),
+              );
+            },
             icon: const Icon(Icons.add),
           ),
         ],
@@ -106,19 +114,19 @@ class _CustomerItem extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
-                  title: const Text('Xóa'),
+                  title: const Text('Delete'),
                   onTap: () {
                     Navigator.pop(context);
                     ref.read(customersProvider.notifier).delete(item.id);
                   },
                 ),
                 ListTile(
-                  title: const Text('Đổi trạng thái'),
+                  title: const Text('Change status to VIP'),
                   onTap: () {
                     Navigator.pop(context);
                     ref
                         .read(customersProvider.notifier)
-                        .changeStatus(item.id, 'Khách VIP');
+                        .changeStatus(item.id, 'VIP');
                   },
                 ),
               ],
