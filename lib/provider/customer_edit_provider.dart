@@ -7,8 +7,8 @@ import '../data/repository/customer_repository.dart';
 import 'customers_repository_provider.dart';
 part 'customer_edit_provider.freezed.dart';
 
-final customerEditProvider =
-    StateNotifierProvider<CustomerEditStateNotifier, CustomerEditState>(
+final customerEditProvider = StateNotifierProvider.autoDispose<
+    CustomerEditStateNotifier, CustomerEditState>(
   (ref) {
     final customerRepo = ref.read(customersRepositoryProvider);
     return CustomerEditStateNotifier(customerRepository: customerRepo);
@@ -22,6 +22,12 @@ class CustomerEditStateNotifier extends StateNotifier<CustomerEditState> {
         super(CustomerEditState());
 
   late final CustomerRepository _customerRepository;
+
+  @override
+  void dispose() {
+    print('di');
+    super.dispose();
+  }
 
   void changeName(String value) {
     state = state.copyWith(name: value);

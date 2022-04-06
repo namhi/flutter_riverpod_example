@@ -37,6 +37,9 @@ class FakeCustomerRepositoryImpl implements CustomerRepository {
 
   @override
   Future<void> insert(Customer customer) async {
+    if (customer.name == null || customer.name.isEmpty) {
+      throw Exception('name can not be null');
+    }
     _customers.add(customer);
   }
 

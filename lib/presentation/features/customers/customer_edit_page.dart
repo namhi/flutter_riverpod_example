@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_example/provider/customers_provider.dart';
 
 import '../../../provider/customer_edit_provider.dart';
 
@@ -23,8 +24,14 @@ class _CustomerEditPageState extends ConsumerState<CustomerEditPage> {
         // show SnackBar
         if (next.lastActionResult!.success) {
           Navigator.of(context).pop();
+          ref.read(customersProvider.notifier).init();
         } else {
           // show error
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.lastActionResult!.message),
+            ),
+          );
         }
       }
     });
