@@ -163,7 +163,9 @@ class __$CustomersStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CustomersState implements _CustomersState {
+class _$_CustomersState
+    with DiagnosticableTreeMixin
+    implements _CustomersState {
   _$_CustomersState(
       {this.customers = const [],
       this.loadingStatus = CustomersStatus.initial,
@@ -187,8 +189,20 @@ class _$_CustomersState implements _CustomersState {
   final List<int> busyItem;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'CustomersState(customers: $customers, loadingStatus: $loadingStatus, lastError: $lastError, isBusy: $isBusy, busyItem: $busyItem)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'CustomersState'))
+      ..add(DiagnosticsProperty('customers', customers))
+      ..add(DiagnosticsProperty('loadingStatus', loadingStatus))
+      ..add(DiagnosticsProperty('lastError', lastError))
+      ..add(DiagnosticsProperty('isBusy', isBusy))
+      ..add(DiagnosticsProperty('busyItem', busyItem));
   }
 
   @override

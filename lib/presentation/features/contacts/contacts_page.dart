@@ -1,57 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_example/provider/customers_provider.dart';
-import '../../../model/customer.dart';
-import 'customer_edit_page.dart';
+import 'package:flutter_riverpod_example/provider/screen_state_provider/contact/contacts_provider.dart';
+import 'package:flutter_riverpod_example/provider/screen_state_provider/contact/contacts_state.dart';
+import '../../../model/contact.dart';
+import 'contact_edit_page.dart';
 
-class CustomersPage extends ConsumerStatefulWidget {
-  const CustomersPage({Key? key}) : super(key: key);
+class ContactsPage extends ConsumerStatefulWidget {
+  const ContactsPage({Key? key}) : super(key: key);
 
   @override
   _CustomersPageState createState() => _CustomersPageState();
 }
 
-class _CustomersPageState extends ConsumerState<CustomersPage> {
+class _CustomersPageState extends ConsumerState<ContactsPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(customersProvider.notifier).init();
+    ref.read(contactsProvider.notifier).init();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Customers'),
+        title: const Text('Contacts'),
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CustomerEditPage(),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const CustomerEditPage(),
+              //   ),
+              // );
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.search),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.more_horiz),
           ),
         ],
       ),
       body: _buildScaffoldBody(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
   Widget _buildScaffoldBody() {
     return Consumer(
       builder: (context, ref, _) {
-        final state = ref.watch(customersProvider);
-        if (state.loadingStatus == CustomersStatus.loading) {
+        final state = ref.watch(contactsProvider);
+        if (state.loadingStatus == ContactsStatus.loading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
 
-        if (state.loadingStatus == CustomersStatus.error) {
+        if (state.loadingStatus == ContactsStatus.error) {
           return Center(
             child: Text(state.lastError ?? ''),
           );
@@ -70,41 +79,41 @@ class _ListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final customersState = ref.watch(customersProvider);
-    if (customersState.customers.isEmpty) {
+    final contactsState = ref.watch(contactsProvider);
+    if (contactsState.contacts.isEmpty) {
       return const Center(
-        child: Text('Không có khách hàng nào'),
+        child: Text('No contacts'),
       );
     }
 
     return ListView.separated(
       itemBuilder: (context, index) {
-        final item = customersState.customers[index];
-        return _CustomerItem(
+        final item = contactsState.contacts[index];
+        return _ContactItem(
           item: item,
-          isBusy: customersState.busyItem.contains(item.id),
+          isBusy: contactsState.busyItem.contains(item.id),
         );
       },
       separatorBuilder: (context, index) => const Divider(),
-      itemCount: customersState.customers.length,
+      itemCount: contactsState.contacts.length,
     );
   }
 }
 
-class _CustomerItem extends ConsumerWidget {
-  const _CustomerItem({
+class _ContactItem extends ConsumerWidget {
+  const _ContactItem({
     Key? key,
     required this.item,
     this.isBusy = false,
   }) : super(key: key);
-  final Customer item;
+  final Contact item;
   final bool isBusy;
 
   @override
   Widget build(BuildContext context, ref) {
-    return _CustomerItemWidget(
-      name: item.name,
-      status: item.status,
+    return _ContactItemWidget(
+      name: item.fullName,
+      status: item.phone ?? 'No phone',
       busy: isBusy,
       onMenuPressed: () {
         showModalBottomSheet(
@@ -117,16 +126,13 @@ class _CustomerItem extends ConsumerWidget {
                   title: const Text('Delete'),
                   onTap: () {
                     Navigator.pop(context);
-                    ref.read(customersProvider.notifier).delete(item.id);
+                    ref.read(contactsProvider.notifier).delete(item.id);
                   },
                 ),
                 ListTile(
                   title: const Text('Change status to VIP'),
                   onTap: () {
                     Navigator.pop(context);
-                    ref
-                        .read(customersProvider.notifier)
-                        .changeStatus(item.id, 'VIP');
                   },
                 ),
               ],
@@ -165,8 +171,8 @@ class _BusyIndicator extends StatelessWidget {
   }
 }
 
-class _CustomerItemWidget extends StatelessWidget {
-  const _CustomerItemWidget({
+class _ContactItemWidget extends StatelessWidget {
+  const _ContactItemWidget({
     Key? key,
     required this.name,
     this.onMenuPressed,
@@ -183,6 +189,11 @@ class _CustomerItemWidget extends StatelessWidget {
     return _BusyIndicator(
       busy: busy,
       child: ListTile(
+        leading: CircleAvatar(
+          child: Text(
+            name.substring(0, 1),
+          ),
+        ),
         title: Text(name),
         trailing: IconButton(
           onPressed: onMenuPressed,

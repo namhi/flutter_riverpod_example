@@ -1,10 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_example/model/customer.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../data/repository/customer_repository.dart';
-import 'customers_repository_provider.dart';
+import 'api_provider/customers_repository_provider.dart';
 part 'customers_provider.freezed.dart';
 
 final customersProvider =
@@ -33,7 +34,9 @@ class CustomerNotifier extends StateNotifier<CustomersState> {
         customers: customers,
       );
     } catch (e, s) {
-      print(e); //TODO add logs
+      if (kDebugMode) {
+        print(e);
+      } //TODO add logs
       state = CustomersState(
         customers: [],
         loadingStatus: CustomersStatus.error,

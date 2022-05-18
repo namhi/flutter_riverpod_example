@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_example/presentation/features/customers/customers_page.dart';
+import 'package:flutter_riverpod_example/presentation/features/contacts/contacts_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const CustomersPage(),
+      home: const ContactsPage(),
     );
   }
 }
